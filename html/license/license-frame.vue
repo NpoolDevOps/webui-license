@@ -15,6 +15,7 @@ module.exports = {
         return {
             authCode: '',
             showUserList: false,
+            modifiable: false,
             appId: '00000000-0000-0000-0000-000000000000',
             userList: [],
             clientList: [],
@@ -28,6 +29,8 @@ module.exports = {
             const axios = require('axios').default;
 
             let authCode = this.$cookies.get('authcode');
+
+            authCode = '9a084e991104f774f1a8e56c30af6f4abd9696c24757835e0d5c4991ba122f8c';
             if (!authCode || authCode == '' || authCode == 'null') {
                 ELEMENT.Notification({
                     title: '授權失敗',
@@ -55,6 +58,11 @@ module.exports = {
                     })
                     return;
                 }
+
+                this.userList = resp.body.users;
+                this.showUserList = resp.body.super_user;
+                this.modifiable = !resp.body.visitor_only;
+                this.clientList = resp.body.clients;
             })
         }
     }
