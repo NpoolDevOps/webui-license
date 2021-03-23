@@ -130,7 +130,7 @@ module.exports = {
                     })
                 return;
             }
-            if (passwordInfo.oldPassword == passwordInfo.newPassword) {
+            if (passwordInfo.currentPassword == passwordInfo.newPassword) {
                 ELEMENT.Notification({
                         title: '密碼設置不符合規範',
                         message: '新密碼與舊密碼一樣',
@@ -147,7 +147,7 @@ module.exports = {
                 return;
             }
 
-            let oldEncPassword = sha256(passwordInfo.oldPassword).substring(0, 12)
+            let oldEncPassword = sha256(passwordInfo.currentPassword).substring(0, 12)
             let newEncPassword = sha256(passwordInfo.newPassword).substring(0, 12)
 
             let authCode = this.$cookies.get('authcode');
