@@ -40,7 +40,10 @@ module.exports = {
         }
     },
     created: function() {
-         this.getLicenseList();
+        this.$on('get_license_list', this.getLicenseList);
+    },
+    mounted: function() {
+        this.$emit('get_license_list');
     },
     methods: {
         getLicenseList: function () {
