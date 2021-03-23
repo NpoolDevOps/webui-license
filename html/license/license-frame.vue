@@ -29,8 +29,6 @@ module.exports = {
             const axios = require('axios').default;
 
             let authCode = this.$cookies.get('authcode');
-
-            authCode = '9a084e991104f774f1a8e56c30af6f4abd9696c24757835e0d5c4991ba122f8c';
             if (!authCode || authCode == '' || authCode == 'null') {
                 ELEMENT.Notification({
                     title: '授權失敗',
