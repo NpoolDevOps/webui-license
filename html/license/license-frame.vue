@@ -3,9 +3,41 @@
         <el-table
             v-if="showUserList"
             :data="userList">
+            <el-table-column
+                prop="username"
+                label="用戶名">
+            </el-table-column>
+            <el-table-column
+                prop="validate_date"
+                label="授權過期時間">
+            </el-table-column>
+            <el-table-column
+                prop="quota"
+                label="授權設備總數">
+            </el-table-column>
+            <el-table-column
+                prop="count"
+                label="在線設備數">
+            </el-table-column>
         </el-table>
         <el-table
             :data="clientList">
+            <el-table-column
+                prop="client_sn"
+                label="設備授權碼">
+            </el-table-column>
+            <el-table-column
+                prop="client_user"
+                label="所屬用戶">
+            </el-table-column>
+            <el-table-column
+                prop="create_time"
+                label="首次上線時間">
+            </el-table-column>
+            <el-table-column
+                prop="status"
+                label="狀態">
+            </el-table-column>
         </el-table>
     </div>
 </template>
