@@ -1,30 +1,25 @@
 <template>
     <div>
-       <vxe-table
-           border
-           show-header-overflow
-           show-overflow
-           highlight-hover-row
+       <el-table
+           stripe
            v-if="showUserList"
            :data="userList">
-           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-           <vxe-table-column field="username" title="用戶名"></vxe-table-column>
-           <vxe-table-column field="validate_date" title="授權過期時間"></vxe-table-column>
-           <vxe-table-column field="quota" title="授權設備總數"></vxe-table-column>
-           <vxe-table-column field="count" title="在線設備數"></vxe-table-column>
-       </vxe-table>
-       <vxe-table
+           <el-table-column prop="username" label="用戶名"></el-table-column>
+           <el-table-column prop="validate_date" label="授權過期時間"></el-table-column>
+           <el-table-column prop="quota" label="授權設備總數"></el-table-column>
+           <el-table-column prop="count" label="在線設備數"></el-table-column>
+       </el-table>
+       <el-table
            border
            show-header-overflow
            show-overflow
            highlight-hover-row
            :data="clientList">
-           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-           <vxe-table-column field="client_sn" title="設備授權碼"></vxe-table-column>
-           <vxe-table-column field="client_user" title="所屬用戶"></vxe-table-column>
-           <vxe-table-column field="create_time" title="上線時間"></vxe-table-column>
-           <vxe-table-column field="status" title="狀態"></vxe-table-column>
-       </vxe-table>
+           <el-table-column prop="client_sn" label="設備授權碼"></el-table-column>
+           <el-table-column prop="client_user" label="所屬用戶"></el-table-column>
+           <el-table-column prop="create_time" label="上線時間"></el-table-column>
+           <el-table-column prop="status" label="狀態"></el-table-column>
+       </el-table>
     </div>
 </template>
 <script>
