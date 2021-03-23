@@ -70,6 +70,12 @@ module.exports = {
                 self.showUserList = resp.body.super_user;
                 self.modifiable = !resp.body.visitor_only;
                 self.clientList = resp.body.clients;
+            }).catch(function (error) {
+                ELEMENT.Notification({
+                        title: '獲取客戶端列表失敗',
+                        message: error.message,
+			            type: 'error',
+                    })
             })
         }
     }
