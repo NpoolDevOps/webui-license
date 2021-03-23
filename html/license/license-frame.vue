@@ -2,10 +2,13 @@
     <div>
         <el-row>
             <el-button type="primary" @click="onModifyPassword">修改密碼</el-button>
-            <el-button type="primary" v-if="superUser">添加用戶</el-button>
+            <el-button type="primary" v-if="superUser" @click="onAddUser">添加用戶</el-button>
             <el-button type="primary" v-if="superUser">修改授權信息</el-button>
             <el-button type="primary" v-if="superUser">修改設備狀態</el-button>
         </el-row>
+        <el-table border stripe v-if="showUserList" :data="registeredUserList">
+           <el-table-column prop="username" label="用戶名"></el-table-column>
+       </el-table>
        <el-table border stripe v-if="showUserList" :data="userList">
            <el-table-column prop="username" label="用戶名"></el-table-column>
            <el-table-column prop="validate_date" label="授權過期時間"></el-table-column>
@@ -19,10 +22,10 @@
            <el-table-column prop="status" label="狀態"></el-table-column>
        </el-table>
        <el-dialog :title="functionName" :visible.sync="showDialog" center :append-to-body="true" :lock-scroll="false" width="30%" :show-close="false">
-           <password-modifier v-if="functionModifyPassword" @submit="submitModifyPassword" @cancel="cancelModifyPassword"></password-modifier>
-           <user-adder v-if="functionModifyPassword"></user-adder>
-           <auth-modifier v-if="functionModifyPassword"></auth-modifier>
-           <device-modifier v-if="functionModifyPassword"></device-modifier>
+           <password-modifier v-if="functionModifyPassword" @submit="submitModifyPassword" @cancel="cancel"></password-modifier>
+           <user-adder v-if="functionAddUser" @submit="submitAddUser" @cancel="cancel"></user-adder>
+           <auth-modifier v-if="functionModifyAuth"></auth-modifier>
+           <device-modifier v-if="functionModifyDeviceStatus"></device-modifier>
        </el-dialog> 
     </div>
 </template>
@@ -37,6 +40,7 @@ module.exports = {
             appId: '00000000-0000-0000-0000-000000000000',
             userList: [],
             clientList: [],
+            registeredUserList: [],
             functionName: '',
             showDialog: false,
             functionModifyPassword: false,
@@ -54,14 +58,58 @@ module.exports = {
     created: function() {
         this.$on('get_license_list', this.getLicenseList);
         this.$on('modify_password', this.modifyPassword);
+        this.$on('get_user_list', this.getUserList)
     },
     mounted: function() {
         this.$emit('get_license_list');
+        this.$emit('get_user_list')
     },
     methods: {
-        getLicenseList: function () {
-            const axios = require('axios').default;
+        getUserList: function() {
+            let authCode = this.$cookies.get('authcode');
+            if (!authCode || authCode == '' || authCode == 'null') {
+                ELEMENT.Notification({
+                    title: '授權失敗',
+                    message: '授權碼缺失: ' + authCode,
+                    type: 'error',
+                })
+                return;
+            }
 
+             var self = this;
+            axios({
+                url: 'https://auth.npool.top/api/v0/user/list',
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                data: {
+                    auth_code: authCode,
+                },
+            }).then(function (response) {
+                let resp = response.data;
+
+                if (resp.code != 0) {
+                    ELEMENT.Notification({
+                        title: '獲取用戶列表失敗',
+                        message: resp.msg,
+			            type: 'error',
+                    })
+                    return;
+                }
+
+                self.registeredUserList = [];
+                resp.body.users.forEach((v, i) => self.registeredUserList.push({
+                    username: v
+                }))
+
+            }).catch(function (error) {
+                ELEMENT.Notification({
+                        title: '獲取用戶列表失敗',
+                        message: error.message,
+			            type: 'error',
+                    })
+            })
+        },
+        getLicenseList: function () {
             let authCode = this.$cookies.get('authcode');
             if (!authCode || authCode == '' || authCode == 'null') {
                 ELEMENT.Notification({
@@ -106,8 +154,70 @@ module.exports = {
                     })
             })
         },
+        onAddUser: function() {
+            this.showDialog = true;
+            this.functionAddUser = true;
+        },
         onModifyPassword: function() {
             this.$emit('modify_password');
+        },
+        submitAddUser: function(userInfo) {
+            this.finishModify();
+            if (userInfo.username == '') {
+                ELEMENT.Notification({
+                        title: '用戶名設置不符合規範',
+                        message: '用戶名不能爲空',
+			            type: 'error',
+                    })
+                return;
+            }
+            if (userInfo.password == '') {
+                ELEMENT.Notification({
+                        title: '密碼設置不符合規範',
+                        message: '密碼不能爲空',
+			            type: 'error',
+                    })
+                return;
+            }
+
+            let encPassword = sha256(userInfo.password).substring(0, 12)
+
+            let authCode = this.$cookies.get('authcode');
+            if (!authCode || authCode == '' || authCode == 'null') {
+                ELEMENT.Notification({
+                    title: '授權碼無效',
+                    message: '授權碼缺失: ' + authCode,
+                    type: 'error',
+                })
+                return;
+            }
+
+            axios({
+                url: 'https://auth.npool.top/api/v0/user/create',
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                data: {
+                    auth_code: authCode,
+                    password: encPassword,
+                    username: userInfo.username,
+                },
+            }).then(function (response) {
+                let resp = response.data;
+
+                if (resp.code != 0) {
+                    ELEMENT.Notification({
+                        title: '創建用戶失敗',
+                        message: resp.msg,
+			            type: 'error',
+                    })
+                }
+            }).catch(function (error) {
+                ELEMENT.Notification({
+                        title: '創建用戶失敗',
+                        message: error.message,
+			            type: 'error',
+                    })
+            })
         },
         modifyPassword: function() {
             this.showDialog = true;
@@ -187,7 +297,7 @@ module.exports = {
                     })
             })
         },
-        cancelModifyPassword: function() {
+        cancel: function() {
             this.finishModify();
         }
     }
