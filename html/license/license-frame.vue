@@ -3,7 +3,7 @@
         <el-row>
             <el-button type="primary" @click="onModifyPassword">修改密碼</el-button>
             <el-button type="primary" v-if="superUser" @click="onAddUser">添加用戶</el-button>
-            <el-button type="primary" v-if="superUser">修改授權信息</el-button>
+            <el-button type="primary" v-if="superUser" @click="onModifyAuth">修改授權信息</el-button>
             <el-button type="primary" v-if="superUser">修改設備狀態</el-button>
         </el-row>
         <el-table border stripe v-if="showUserList" :data="registeredUserList">
@@ -24,7 +24,7 @@
        <el-dialog :title="functionName" :visible.sync="showDialog" center :append-to-body="true" :lock-scroll="false" width="30%" :show-close="false">
            <password-modifier v-if="functionModifyPassword" @submit="submitModifyPassword" @cancel="cancel"></password-modifier>
            <user-adder v-if="functionAddUser" @submit="submitAddUser" @cancel="cancel"></user-adder>
-           <auth-modifier v-if="functionModifyAuth"></auth-modifier>
+           <auth-modifier v-if="functionModifyAuth" @submit="submitModifyAuth" @cancel="cancel"></auth-modifier>
            <device-modifier v-if="functionModifyDeviceStatus"></device-modifier>
        </el-dialog> 
     </div>
@@ -292,6 +292,50 @@ module.exports = {
             }).catch(function (error) {
                 ELEMENT.Notification({
                         title: '修改密碼失敗',
+                        message: error.message,
+			            type: 'error',
+                    })
+            })
+        },
+        onModifyAuth: function() {
+            this.showDialog = true;
+            this.functionModifyAuth = true;
+        },
+        submitModifyAuth: function(userInfo) {
+            this.finishModify();
+            let authCode = this.$cookies.get('authcode');
+            if (!authCode || authCode == '' || authCode == 'null') {
+                ELEMENT.Notification({
+                    title: '授權碼無效',
+                    message: '授權碼缺失: ' + authCode,
+                    type: 'error',
+                })
+                return;
+            }
+
+            axios({
+                url: 'https://license.npool.top/api/v0/client/update_auth',
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                data: {
+                    auth_code: authCode,
+                    username: userInfo.username,
+                    quota: parseInt(userInfo.quota, 10),
+                    validate_date: parseInt(userInfo.validate_time, 10),
+                },
+            }).then(function (response) {
+                let resp = response.data;
+
+                if (resp.code != 0) {
+                    ELEMENT.Notification({
+                        title: '修改用戶授權失敗',
+                        message: resp.msg,
+			            type: 'error',
+                    })
+                }
+            }).catch(function (error) {
+                ELEMENT.Notification({
+                        title: '修改用戶授權失敗',
                         message: error.message,
 			            type: 'error',
                     })
