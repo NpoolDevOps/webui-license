@@ -122,7 +122,7 @@ module.exports = {
         },
         submitModifyPassword: function(passwordInfo) {
             this.finishModify();
-            if (passwordInfo.newPassword != newPassword.confirmPassword) {
+            if (passwordInfo.newPassword != passwordInfo.confirmPassword) {
                 ELEMENT.Notification({
                         title: '密碼設置不符合規範',
                         message: '新密碼與確認密碼不一致',
