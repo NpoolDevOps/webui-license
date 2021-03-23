@@ -54,6 +54,7 @@ module.exports = {
                 return;
             }
 
+            var self = this;
             axios({
                 url: 'https://license.npool.top/api/v0/client/myclients',
                 method: 'post',
@@ -73,10 +74,10 @@ module.exports = {
                     return;
                 }
 
-                this.userList = resp.body.users;
-                this.showUserList = resp.body.super_user;
-                this.modifiable = !resp.body.visitor_only;
-                this.clientList = resp.body.clients;
+                self.userList = resp.body.users;
+                self.showUserList = resp.body.super_user;
+                self.modifiable = !resp.body.visitor_only;
+                self.clientList = resp.body.clients;
             })
         }
     }
