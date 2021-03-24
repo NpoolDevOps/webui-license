@@ -14,6 +14,9 @@
            <el-table-column prop="validate_date" label="授權過期時間"></el-table-column>
            <el-table-column prop="quota" label="授權設備總數"></el-table-column>
            <el-table-column prop="count" label="在線設備數"></el-table-column>
+           <el-table-column prop="offline_count" label="離線設備數"></el-table-column>
+           <el-table-column prop="disable_count" label="禁用設備數"></el-table-column>
+           <el-table-column prop="maintain_count" label="維護中設備數"></el-table-column>
        </el-table>
        <el-table border :data="clientList">
            <el-table-column prop="client_sn" label="設備授權碼"></el-table-column>
@@ -146,6 +149,31 @@ module.exports = {
                 self.modifiable = !resp.body.visitor_only;
                 self.clientList = resp.body.clients;
                 self.superUser = resp.body.super_user;
+
+                self.userList.forEach((_, i)  => {
+                    self.userList[i].count = 0;
+                    self.userList[i].offline_count = 0;
+                    self.userList[i].disable_count = 0;
+                    self.userList[i].maintain_count = 0;
+                })
+
+                resp.body.clients.forEach((v, _) => {
+                    self.userList.some((u, i) => {
+                        if (u.username == v.client_user) {
+                            if (v.status == 'online') {
+                                self.userList[i].count += 1;
+                            } else if (v.status == 'offline') {
+                                self.userList[i].offline_count += 1;
+                            } else if (v.status == 'disable') {
+                                self.userList[i].disable_count += 1;
+                            } else if (v.status == 'maintaining') {
+                                self.userList[i].maintain_count += 1;
+                            }
+                            return true;
+                        }
+                    })
+                    console.log(self.userList)
+                })
 
             }).catch(function (error) {
                 ELEMENT.Notification({
