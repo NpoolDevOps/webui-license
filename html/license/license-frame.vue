@@ -20,6 +20,7 @@
            <el-table-column prop="client_user" label="所屬用戶"></el-table-column>
            <el-table-column prop="create_time" label="上線時間"></el-table-column>
            <el-table-column prop="status" label="狀態"></el-table-column>
+           <el-table-column prop="network_type" label="應用類型"></el-table-column>
        </el-table>
        <el-dialog :title="functionName" :visible.sync="showDialog" center :append-to-body="true" :lock-scroll="false" width="30%" :show-close="false">
            <password-modifier v-if="functionModifyPassword" @submit="submitModifyPassword" @cancel="cancel"></password-modifier>
