@@ -9,7 +9,7 @@
         <el-table border stripe v-if="showUserList" :data="registeredUserList">
            <el-table-column prop="username" label="用戶名"></el-table-column>
        </el-table>
-       <el-table border stripe v-if="showUserList" :data="userList">
+       <el-table border stripe :data="userList">
            <el-table-column prop="username" label="用戶名"></el-table-column>
            <el-table-column prop="validate_date" label="授權過期時間"></el-table-column>
            <el-table-column prop="quota" label="授權設備總數"></el-table-column>
