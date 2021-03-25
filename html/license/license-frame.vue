@@ -95,7 +95,7 @@ module.exports = {
                     ELEMENT.Notification({
                         title: '獲取用戶列表失敗',
                         message: resp.msg,
-			            type: 'error',
+                        type: 'error',
                     })
                     return;
                 }
@@ -109,7 +109,7 @@ module.exports = {
                 ELEMENT.Notification({
                         title: '獲取用戶列表失敗',
                         message: error.message,
-			            type: 'error',
+                        type: 'error',
                     })
             })
         },
@@ -139,7 +139,7 @@ module.exports = {
                     ELEMENT.Notification({
                         title: '獲取客戶端列表失敗',
                         message: resp.msg,
-			            type: 'error',
+                        type: 'error',
                     })
                     return;
                 }
@@ -179,7 +179,7 @@ module.exports = {
                 ELEMENT.Notification({
                         title: '獲取客戶端列表失敗',
                         message: error.message,
-			            type: 'error',
+                        type: 'error',
                     })
             })
         },
@@ -196,7 +196,7 @@ module.exports = {
                 ELEMENT.Notification({
                         title: '用戶名設置不符合規範',
                         message: '用戶名不能爲空',
-			            type: 'error',
+                        type: 'error',
                     })
                 return;
             }
@@ -204,7 +204,7 @@ module.exports = {
                 ELEMENT.Notification({
                         title: '密碼設置不符合規範',
                         message: '密碼不能爲空',
-			            type: 'error',
+                        type: 'error',
                     })
                 return;
             }
@@ -237,14 +237,14 @@ module.exports = {
                     ELEMENT.Notification({
                         title: '創建用戶失敗',
                         message: resp.msg,
-			            type: 'error',
+                        type: 'error',
                     })
                 }
             }).catch(function (error) {
                 ELEMENT.Notification({
                         title: '創建用戶失敗',
                         message: error.message,
-			            type: 'error',
+                        type: 'error',
                     })
             })
         },
@@ -265,7 +265,7 @@ module.exports = {
                 ELEMENT.Notification({
                         title: '密碼設置不符合規範',
                         message: '新密碼與確認密碼不一致',
-			            type: 'error',
+                        type: 'error',
                     })
                 return;
             }
@@ -273,7 +273,7 @@ module.exports = {
                 ELEMENT.Notification({
                         title: '密碼設置不符合規範',
                         message: '新密碼與舊密碼一樣',
-			            type: 'error',
+                        type: 'error',
                     })
                 return;
             }
@@ -281,7 +281,7 @@ module.exports = {
                 ELEMENT.Notification({
                         title: '密碼設置不符合規範',
                         message: '新密碼不能爲空',
-			            type: 'error',
+                        type: 'error',
                     })
                 return;
             }
@@ -315,14 +315,14 @@ module.exports = {
                     ELEMENT.Notification({
                         title: '修改密碼失敗',
                         message: resp.msg,
-			            type: 'error',
+                        type: 'error',
                     })
                 }
             }).catch(function (error) {
                 ELEMENT.Notification({
                         title: '修改密碼失敗',
                         message: error.message,
-			            type: 'error',
+                        type: 'error',
                     })
             })
         },
@@ -359,14 +359,14 @@ module.exports = {
                     ELEMENT.Notification({
                         title: '修改用戶授權失敗',
                         message: resp.msg,
-			            type: 'error',
+                        type: 'error',
                     })
                 }
             }).catch(function (error) {
                 ELEMENT.Notification({
                         title: '修改用戶授權失敗',
                         message: error.message,
-			            type: 'error',
+                        type: 'error',
                     })
             })
         },
