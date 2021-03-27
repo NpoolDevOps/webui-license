@@ -2,9 +2,9 @@
     <div>
         <el-row>
             <el-button type="primary" @click="onModifyPassword">修改密碼</el-button>
-            <el-button type="primary" v-if="superUser && !modifiable" @click="onAddUser">添加用戶</el-button>
-            <el-button type="primary" v-if="superUser && !modifiable" @click="onModifyAuth">修改授權信息</el-button>
-            <el-button type="primary" v-if="superUser && !modifiable">修改設備狀態</el-button>
+            <el-button type="primary" v-if="superUser && modifiable" @click="onAddUser">添加用戶</el-button>
+            <el-button type="primary" v-if="superUser && modifiable" @click="onModifyAuth">修改授權信息</el-button>
+            <el-button type="primary" v-if="superUser && modifiable">修改設備狀態</el-button>
         </el-row>
         <el-table border stripe v-if="showUserList" :data="registeredUserList">
            <el-table-column prop="username" label="用戶名"></el-table-column>
